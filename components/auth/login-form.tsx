@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { createClient } from '@/lib/supabase/client'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 interface LoginFormProps {
@@ -18,6 +19,8 @@ export default function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProp
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState('')
+    const [success, setSuccess] = useState(false)
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
@@ -34,9 +37,15 @@ export default function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProp
             if (error) {
                 setError(error.message)
             } else {
+                setSuccess(true)
                 onSuccess?.()
+
+                // Show success message for 2 seconds then redirect
+                setTimeout(() => {
+                    router.push('/')
+                }, 2000)
             }
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred')
         } finally {
             setLoading(false)
@@ -56,6 +65,14 @@ export default function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProp
                     {error && (
                         <Alert variant="destructive">
                             <AlertDescription>{error}</AlertDescription>
+                        </Alert>
+                    )}
+
+                    {success && (
+                        <Alert className="border-green-200 bg-green-50 text-green-800">
+                            <AlertDescription>
+                                Login successful! Redirecting to home page...
+                            </AlertDescription>
                         </Alert>
                     )}
 
@@ -95,7 +112,7 @@ export default function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProp
                                 onClick={onSwitchToSignup}
                                 disabled={loading}
                             >
-                                Don't have an account? Sign up
+                                Don&apos;t have an account? Sign up
                             </Button>
                         </div>
                     )}
