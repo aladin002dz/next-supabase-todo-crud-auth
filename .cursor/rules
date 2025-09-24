@@ -5,11 +5,9 @@ rules:
   # ─── General Project Context ─────────────────────────────
   - Always assume this project uses:
       - Next.js (App Router, TypeScript, Server/Client Components).
-      - Supabase for authentication, database, and storage.
+      - Supabase for authentication, and database.
       - TailwindCSS for styling.
       - shadcn/ui as the UI component library.
-      - Cloudflare R2 (S3-compatible) for file uploads.
-      - Resend for transactional emails.
       - react-hook-form + zod for forms and validation.
   - Prefer functional React components with TypeScript.
 
@@ -51,18 +49,6 @@ rules:
   - Use consistent icon sizing (typically 16px, 20px, or 24px) with Tailwind classes: `size-4`, `size-5`, `size-6`.
   - Apply proper ARIA labels for accessibility: `<Icon aria-label="Description" />` or use `aria-hidden="true"` for decorative icons.
   - Prefer semantic icon names that clearly represent their purpose.
-
-  # ─── R2 Storage ─────────────────────────────────────────
-  - For file uploads (e.g., profile pictures), always generate presigned URLs on the server using AWS SDK v3.
-  - Upload files directly from the client with `fetch(uploadUrl, { method: "PUT", ... })`.
-  - Store the file’s public URL (or CDN URL) in the `profiles` table.
-
-  # ─── Resend (Emails) ────────────────────────────────────
-  - Use the Resend SDK in server-side route handlers or server actions for:
-      - Signup verification (6-digit code).
-      - Forgot password (reset code).
-      - Change email confirmation (6-digit code).
-  - Never send sensitive tokens directly in emails — always use codes or one-time links.
 
   # ─── Code Quality ───────────────────────────────────────
   - Always type with TypeScript interfaces or types.
