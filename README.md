@@ -95,3 +95,9 @@ or you can simply run `npx prisma db push` to push the schema to the database.
 npx prisma db push
 ```
 
+## Add Supabase Authentication
+
+```bash
+npm install @supabase/supabase-js @supabase/ssr
+```
+
