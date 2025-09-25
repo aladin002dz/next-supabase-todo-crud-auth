@@ -4,10 +4,20 @@ import { Task } from "@/lib/_types";
 import { prisma } from "@/prisma";
 import NewListButton from "./_components/NewTaskForm";
 import TaskCard from "./_components/TaskCard";
+import { getUser } from "./actions/auth";
 
 export default async function Home() {
+  // Get the authenticated user
+  const user = await getUser()
+  if (!user) {
+    return <div>Please log in to view your tasks.</div>
+  }
 
+  // Fetch only the authenticated user's todos
   const myTasks: Task[] = await prisma.todo.findMany({
+    where: {
+      userId: user.id, // Filter by authenticated user
+    },
     select: {
       id: true,
       title: true,
