@@ -8,6 +8,15 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
+// prisma/schema.prisma
+
+model User {
+  id      String @id @db.Uuid
+  todos   Todo[]
+
+  @@map("users")
+}
+
 model Todo {
   id        String   @id @default(uuid())
   title     String
@@ -15,4 +24,7 @@ model Todo {
   completed Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @db.Uuid
 }

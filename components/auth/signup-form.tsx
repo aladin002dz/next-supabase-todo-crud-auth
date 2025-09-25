@@ -14,6 +14,7 @@ interface SignupFormProps {
 }
 
 export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormProps) {
+    const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
@@ -26,6 +27,12 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
         setLoading(true)
         setError('')
         setMessage('')
+
+        if (!name.trim()) {
+            setError('Name is required')
+            setLoading(false)
+            return
+        }
 
         if (password !== confirmPassword) {
             setError('Passwords do not match')
@@ -44,6 +51,11 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
             const { error } = await supabase.auth.signUp({
                 email,
                 password,
+                options: {
+                    data: {
+                        name: name.trim(),
+                    }
+                }
             })
 
             if (error) {
@@ -52,7 +64,7 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
                 setMessage('Check your email for the confirmation link!')
                 onSuccess?.()
             }
-        } catch (err) {
+        } catch {
             setError('An unexpected error occurred')
         } finally {
             setLoading(false)
@@ -80,6 +92,19 @@ export default function SignupForm({ onSuccess, onSwitchToLogin }: SignupFormPro
                             <AlertDescription>{message}</AlertDescription>
                         </Alert>
                     )}
+
+                    <div className="space-y-2">
+                        <Label htmlFor="name">Name</Label>
+                        <Input
+                            id="name"
+                            type="text"
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
+                            required
+                            disabled={loading}
+                            placeholder="Enter your full name"
+                        />
+                    </div>
 
                     <div className="space-y-2">
                         <Label htmlFor="email">Email</Label>

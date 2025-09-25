@@ -43,7 +43,7 @@ export default function LoginForm({ onSuccess, onSwitchToSignup }: LoginFormProp
                 // Show success message for 2 seconds then redirect
                 setTimeout(() => {
                     router.push('/')
-                }, 2000)
+                }, 300)
             }
         } catch {
             setError('An unexpected error occurred')
